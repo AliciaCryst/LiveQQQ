@@ -1,0 +1,103 @@
+# QQQ holdings as of 2026-09-19 starter snapshot; weight_pct is percentage points
+symbol	company	weight_pct
+NVDA	Nvidia Corp	8.470000
+AAPL	Apple Inc.	7.900000
+MSFT	Microsoft Corp	5.900000
+MU	Micron Technology, Inc.	4.860000
+AMZN	Amazon.Com Inc	4.310000
+AMD	Advanced Micro Devices	3.920000
+GOOGL	Alphabet Inc. Class A Common Stock	3.230000
+META	Meta Platforms, Inc. Class A Common Stock	3.220000
+GOOG	Alphabet Inc. Class C Capital Stock	2.990000
+TSLA	Tesla, Inc. Common Stock	2.920000
+AVGO	Broadcom Inc. Common Stock	2.630000
+INTC	Intel Corp	2.410000
+WMT	Walmart Inc. Common Stock	2.290000
+CSCO	Cisco Systems, Inc. Common Stock (DE)	1.910000
+PLTR	Palantir Technologies Inc. Class A Common Stock	1.780000
+COST	Costco Wholesale Corp	1.750000
+LRCX	Lam Research Corp	1.480000
+AMAT	Applied Materials Inc	1.460000
+NFLX	NetFlix Inc	1.400000
+PANW	Palo Alto Networks, Inc. Common Stock	1.350000
+SPCX	Space Exploration Technologies Corp. Class A Common Stock	1.310000
+CRWD	CrowdStrike Holdings, Inc. Class A Common Stock	1.100000
+SNDK	Sandisk Corporation Common Stock	1.050000
+TXN	Texas Instruments Incorporated	1.030000
+KLAC	KLA Corporation Common Stock	0.970000
+LIN	Linde plc Ordinary Share	0.930000
+MRVL	Marvell Technology, Inc. Common Stock	0.930000
+AMGN	Amgen Inc	0.900000
+QCOM	Qualcomm Inc	0.880000
+GILD	Gilead Sciences Inc	0.830000
+PEP	PepsiCo, Inc.	0.800000
+TMUS	T-Mobile US, Inc.	0.790000
+STX	Seagate Technology Holdings PLC Ordinary Shares (Ireland)	0.790000
+ADI	Analog Devices, Inc.	0.780000
+SHOP	Shopify Inc. Class A subordinate voting shares	0.690000
+ASML	ASML Holding NV	0.660000
+WDC	Western Digital Corp.	0.640000
+ISRG	Intuitive Surgical Inc.	0.600000
+BKNG	Booking Holdings Inc. Common Stock	0.580000
+VRTX	Vertex Pharmaceuticals Inc	0.580000
+FTNT	Fortinet, Inc.	0.560000
+ARM	Arm Holdings plc American Depositary Shares	0.490000
+SBUX	Starbucks Corp	0.490000
+ADP	Automatic Data Processing	0.480000
+ADBE	Adobe Inc.	0.450000
+APP	Applovin Corporation Class A Common Stock	0.430000
+CEG	Constellation Energy Corporation Common Stock	0.420000
+MELI	Mercado Libre, Inc	0.410000
+CSX	CSX Corporation	0.390000
+MAR	Marriott International Class A Common Stock	0.390000
+MNST	Monster Beverage Corporation	0.380000
+INTU	Intuit Inc	0.380000
+CMCSA	Comcast Corp	0.360000
+REGN	Regeneron Pharmaceuticals Inc	0.360000
+DASH	DoorDash, Inc. Class A Common Stock	0.350000
+MDLZ	Mondelez International, Inc. Class A	0.350000
+CTAS	Cintas Corp	0.350000
+DDOG	Datadog, Inc. Class A Common Stock	0.340000
+CDNS	Cadence Design Systems	0.340000
+ROST	Ross Stores Inc	0.330000
+SNPS	Synopsys Inc	0.320000
+WBD	Warner Bros. Discovery, Inc. Series A Common Stock	0.310000
+ORLY	O'Reilly Automotive, Inc.	0.310000
+LITE	Lumentum Holdings Inc. Common Stock	0.310000
+ABNB	Airbnb, Inc. Class A Common Stock	0.310000
+AEP	American Electric Power Company, Inc.	0.290000
+HON	Honeywell International, Inc.	0.290000
+PCAR	Paccar Inc	0.270000
+NXPI	NXP Semiconductors N.V.	0.250000
+MPWR	Monolithic Power Systems, Inc.	0.250000
+FAST	Fastenal Co	0.250000
+BKR	Baker Hughes Company	0.250000
+FANG	Diamondback Energy, Inc.	0.240000
+TER	Teradyne, Inc. Common Stock	0.240000
+HONA	Honeywell Aerospace Inc. Common Stock	0.230000
+PDD	PDD Holdings Inc. American Depositary Shares	0.230000
+ALAB	Astera Labs, Inc. Common Stock	0.220000
+NBIS	Nebius Group N.V. Class A Ordinary Shares	0.210000
+PYPL	PayPal Holdings, Inc. Common Stock	0.210000
+ADSK	Autodesk Inc	0.200000
+XEL	Xcel Energy, Inc.	0.200000
+CCEP	Coca-Cola Europacific Partners plc Ordinary Shares	0.200000
+MSTR	Strategy Inc Common Stock Class A	0.190000
+EXC	Exelon Corporation	0.190000
+KDP	Keurig Dr Pepper Inc.	0.190000
+PAYX	Paychex Inc	0.180000
+WDAY	Workday, Inc. Class A Common Stock	0.180000
+IDXX	Idexx Laboratories Inc	0.180000
+FER	Ferrovial N.V. Ordinary Shares	0.170000
+RKLB	Rocket Lab Corporation Common Stock	0.170000
+TTWO	Take-Two Interactive Software Inc	0.170000
+MCHP	Microchip Technology Inc	0.170000
+TRI	Thomson Reuters Corporation Common Shares	0.170000
+ROP	Roper Technologies, Inc. Common Stock	0.170000
+AXON	Axon Enterprise, Inc. Common Stock	0.160000
+ODFL	Old Dominion Freight Line	0.160000
+CRWV	CoreWeave, Inc. Class A Common Stock	0.160000
+DXCM	DexCom, Inc.	0.150000
+ALNY	Alnylam Pharmaceuticals, Inc.	0.140000
+GEHC	GE HealthCare Technologies Inc. Common Stock	0.130000
+CPRT	Copart Inc	0.120000

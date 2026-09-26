@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QQQ Interactive Holdings Map</title>
+<style>
+  :root { color-scheme:dark; --bg:#0d1117; --panel:#151b23; --card:#1c2430;
+    --text:#f4f7fb; --muted:#aab5c1; --border:#344154; --accent:#7db9ff; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text);
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; }
+  .container { width:min(1550px,96%); margin:28px auto; }
+  .header { display:flex; justify-content:space-between; align-items:end; gap:18px; flex-wrap:wrap; }
+  h1 { margin:0; font-size:28px; }
+  .subtitle { margin-top:7px; color:var(--muted); }
+  .controls { display:flex; gap:8px; flex-wrap:wrap; }
+  input,button { min-height:44px; border:1px solid var(--border); border-radius:9px;
+    background:var(--card); color:var(--text); font-size:16px; }
+  input { padding:0 14px; width:270px; }
+  button { padding:0 16px; cursor:pointer; }
+  button:hover,button:focus-visible,input:focus-visible { border-color:var(--accent); }
+  .detail-card { margin-top:18px; background:var(--card); border:1px solid var(--border);
+    border-radius:12px; padding:18px; }
+  .detail-top { display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap; }
+  .detail-ticker,.detail-weight { font-size:34px; font-weight:800; }
+  .detail-name { margin-top:4px; color:var(--muted); }
+  .detail-weight { text-align:right; }
+  .detail-label { color:var(--muted); font-size:12px; }
+  .details { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); margin-top:16px; gap:16px; }
+  .detail-value { margin-top:3px; font-weight:700; overflow-wrap:anywhere; }
+  .up { color:#a9e8c4; } .down { color:#ffc1bd; }
+  .legend { display:flex; align-items:center; flex-wrap:wrap; gap:14px; color:var(--muted); font-size:13px; }
+  .swatch { display:inline-block; width:12px; height:12px; border-radius:3px; margin-right:5px; vertical-align:-1px; }
+  .status-row { display:flex; justify-content:space-between; align-items:center; gap:10px;
+    color:var(--muted); font-size:13px; margin:14px 0 8px; flex-wrap:wrap; }
+  .chart-wrapper { width:100%; overflow-x:auto; border:1px solid var(--border);
+    border-radius:12px; background:var(--panel); }
+  svg { display:block; width:100%; min-width:950px; height:auto; }
+  .footer { color:var(--muted); margin-top:10px; font-size:13px; line-height:1.5; }
+  .holding { cursor:pointer; outline:none; }
+  .holding rect { transition:stroke-width 120ms ease,fill-opacity 120ms ease; }
+  .holding:focus-visible rect { stroke:var(--accent); stroke-width:3; }
+  @media (max-width:680px) {
+    .detail-top { flex-direction:column; } .detail-weight { text-align:left; }
+    .details { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    .controls,input { width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div>
+      <h1>QQQ Interactive Holdings Map</h1>
+      <div class="subtitle">Tile area represents the published portfolio weight. Hover to enlarge; click to lock.</div>
+    </div>
+    <div class="controls">
+      <input id="search" type="search" placeholder="Search ticker or company" aria-label="Search holdings">
+      <button id="reset" type="button">Reset</button>
+    </div>
+  </div>
+  <div class="detail-card" aria-live="polite">
+    <div class="detail-top">
+      <div><div id="detailTicker" class="detail-ticker"></div><div id="detailName" class="detail-name"></div></div>
+      <div><div id="detailWeight" class="detail-weight"></div><div class="detail-label">Portfolio weight</div></div>
+    </div>
+    <div class="details">
+      <div><div class="detail-label">Rank</div><div id="detailRank" class="detail-value"></div></div>
+      <div><div class="detail-label">Latest price</div><div id="detailPrice" class="detail-value"></div></div>
+      <div><div class="detail-label">Change vs previous trading close</div><div id="detailChange" class="detail-value"></div></div>
+      <div><div class="detail-label">Latest price bar (Pacific time)</div><div id="detailDate" class="detail-value"></div></div>
+    </div>
+  </div>
+  <div class="status-row">
+    <span id="status">Loading holdings…</span>
+    <div class="legend"><span id="gainLegend"><i class="swatch" style="background:#ccebd8"></i>Gains</span>
+      <span id="lossLegend"><i class="swatch" style="background:#8b0000"></i>Losses</span>
+      <span><i class="swatch" style="background:#dce4ed"></i>Flat / no quote</span></div>
+  </div>
+  <div class="chart-wrapper"><svg id="chart" viewBox="0 0 1250 850" role="img" aria-label="Treemap of QQQ holdings, sized by weight and colored by daily price change"></svg></div>
+  <div id="footer" class="footer"></div>
+</div>
+<script type="module">
+async function init() {
+  const holdings = [{"ticker":"NVDA","name":"Nvidia Corp","weight":8.47,"rank":1,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"AAPL","name":"Apple Inc.","weight":7.9,"rank":2,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"MSFT","name":"Microsoft Corp","weight":5.9,"rank":3,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"MU","name":"Micron Technology, Inc.","weight":4.86,"rank":4,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"AMZN","name":"Amazon.Com Inc","weight":4.31,"rank":5,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"AMD","name":"Advanced Micro Devices","weight":3.92,"rank":6,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"GOOGL","name":"Alphabet Inc. Class A Common Stock","weight":3.23,"rank":7,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"META","name":"Meta Platforms, Inc. Class A Common Stock","weight":3.22,"rank":8,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"GOOG","name":"Alphabet Inc. Class C Capital Stock","weight":2.99,"rank":9,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"TSLA","name":"Tesla, Inc. Common Stock","weight":2.92,"rank":10,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"AVGO","name":"Broadcom Inc. Common Stock","weight":2.63,"rank":11,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"INTC","name":"Intel Corp","weight":2.41,"rank":12,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"WMT","name":"Walmart Inc. Common Stock","weight":2.29,"rank":13,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"CSCO","name":"Cisco Systems, Inc. Common Stock (DE)","weight":1.91,"rank":14,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"PLTR","name":"Palantir Technologies Inc. Class A Common Stock","weight":1.78,"rank":15,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"COST","name":"Costco Wholesale Corp","weight":1.75,"rank":16,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"LRCX","name":"Lam Research Corp","weight":1.48,"rank":17,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"AMAT","name":"Applied Materials Inc","weight":1.46,"rank":18,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"NFLX","name":"NetFlix Inc","weight":1.4,"rank":19,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"PANW","name":"Palo Alto Networks, Inc. Common Stock","weight":1.35,"rank":20,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"SPCX","name":"Space Exploration Technologies Corp. Class A Common Stock","weight":1.31,"rank":21,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"CRWD","name":"CrowdStrike Holdings, Inc. Class A Common Stock","weight":1.1,"rank":22,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"SNDK","name":"Sandisk Corporation Common Stock","weight":1.05,"rank":23,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"TXN","name":"Texas Instruments Incorporated","weight":1.03,"rank":24,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"KLAC","name":"KLA Corporation Common Stock","weight":0.97,"rank":25,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"LIN","name":"Linde plc Ordinary Share","weight":0.93,"rank":26,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"MRVL","name":"Marvell Technology, Inc. Common Stock","weight":0.93,"rank":27,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"AMGN","name":"Amgen Inc","weight":0.9,"rank":28,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"QCOM","name":"Qualcomm Inc","weight":0.88,"rank":29,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"GILD","name":"Gilead Sciences Inc","weight":0.83,"rank":30,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"PEP","name":"PepsiCo, Inc.","weight":0.8,"rank":31,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"TMUS","name":"T-Mobile US, Inc.","weight":0.79,"rank":32,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"STX","name":"Seagate Technology Holdings PLC Ordinary Shares (Ireland)","weight":0.79,"rank":33,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"ADI","name":"Analog Devices, Inc.","weight":0.78,"rank":34,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"SHOP","name":"Shopify Inc. Class A subordinate voting shares","weight":0.69,"rank":35,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"ASML","name":"ASML Holding NV","weight":0.66,"rank":36,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"WDC","name":"Western Digital Corp.","weight":0.64,"rank":37,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"ISRG","name":"Intuitive Surgical Inc.","weight":0.6,"rank":38,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"BKNG","name":"Booking Holdings Inc. Common Stock","weight":0.58,"rank":39,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"VRTX","name":"Vertex Pharmaceuticals Inc","weight":0.58,"rank":40,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"FTNT","name":"Fortinet, Inc.","weight":0.56,"rank":41,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"ARM","name":"Arm Holdings plc American Depositary Shares","weight":0.49,"rank":42,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"SBUX","name":"Starbucks Corp","weight":0.49,"rank":43,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"ADP","name":"Automatic Data Processing","weight":0.48,"rank":44,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"ADBE","name":"Adobe Inc.","weight":0.45,"rank":45,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"APP","name":"Applovin Corporation Class A Common Stock","weight":0.43,"rank":46,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"CEG","name":"Constellation Energy Corporation Common Stock","weight":0.42,"rank":47,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"MELI","name":"Mercado Libre, Inc","weight":0.41,"rank":48,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"CSX","name":"CSX Corporation","weight":0.39,"rank":49,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"MAR","name":"Marriott International Class A Common Stock","weight":0.39,"rank":50,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"MNST","name":"Monster Beverage Corporation","weight":0.38,"rank":51,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"INTU","name":"Intuit Inc","weight":0.38,"rank":52,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"CMCSA","name":"Comcast Corp","weight":0.36,"rank":53,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"REGN","name":"Regeneron Pharmaceuticals Inc","weight":0.36,"rank":54,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"DASH","name":"DoorDash, Inc. Class A Common Stock","weight":0.35,"rank":55,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"MDLZ","name":"Mondelez International, Inc. Class A","weight":0.35,"rank":56,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"CTAS","name":"Cintas Corp","weight":0.35,"rank":57,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"DDOG","name":"Datadog, Inc. Class A Common Stock","weight":0.34,"rank":58,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"CDNS","name":"Cadence Design Systems","weight":0.34,"rank":59,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"ROST","name":"Ross Stores Inc","weight":0.33,"rank":60,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"SNPS","name":"Synopsys Inc","weight":0.32,"rank":61,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"WBD","name":"Warner Bros. Discovery, Inc. Series A Common Stock","weight":0.31,"rank":62,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"ORLY","name":"O'Reilly Automotive, Inc.","weight":0.31,"rank":63,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"LITE","name":"Lumentum Holdings Inc. Common Stock","weight":0.31,"rank":64,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"ABNB","name":"Airbnb, Inc. Class A Common Stock","weight":0.31,"rank":65,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"AEP","name":"American Electric Power Company, Inc.","weight":0.29,"rank":66,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"HON","name":"Honeywell International, Inc.","weight":0.29,"rank":67,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"PCAR","name":"Paccar Inc","weight":0.27,"rank":68,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"NXPI","name":"NXP Semiconductors N.V.","weight":0.25,"rank":69,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"MPWR","name":"Monolithic Power Systems, Inc.","weight":0.25,"rank":70,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"FAST","name":"Fastenal Co","weight":0.25,"rank":71,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"BKR","name":"Baker Hughes Company","weight":0.25,"rank":72,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"FANG","name":"Diamondback Energy, Inc.","weight":0.24,"rank":73,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"TER","name":"Teradyne, Inc. Common Stock","weight":0.24,"rank":74,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"HONA","name":"Honeywell Aerospace Inc. Common Stock","weight":0.23,"rank":75,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"PDD","name":"PDD Holdings Inc. American Depositary Shares","weight":0.23,"rank":76,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"ALAB","name":"Astera Labs, Inc. Common Stock","weight":0.22,"rank":77,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"NBIS","name":"Nebius Group N.V. Class A Ordinary Shares","weight":0.21,"rank":78,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"PYPL","name":"PayPal Holdings, Inc. Common Stock","weight":0.21,"rank":79,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"ADSK","name":"Autodesk Inc","weight":0.2,"rank":80,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"XEL","name":"Xcel Energy, Inc.","weight":0.2,"rank":81,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"CCEP","name":"Coca-Cola Europacific Partners plc Ordinary Shares","weight":0.2,"rank":82,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"MSTR","name":"Strategy Inc Common Stock Class A","weight":0.19,"rank":83,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"EXC","name":"Exelon Corporation","weight":0.19,"rank":84,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"KDP","name":"Keurig Dr Pepper Inc.","weight":0.19,"rank":85,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"PAYX","name":"Paychex Inc","weight":0.18,"rank":86,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"WDAY","name":"Workday, Inc. Class A Common Stock","weight":0.18,"rank":87,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"IDXX","name":"Idexx Laboratories Inc","weight":0.18,"rank":88,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"FER","name":"Ferrovial N.V. Ordinary Shares","weight":0.17,"rank":89,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"RKLB","name":"Rocket Lab Corporation Common Stock","weight":0.17,"rank":90,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"TTWO","name":"Take-Two Interactive Software Inc","weight":0.17,"rank":91,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"MCHP","name":"Microchip Technology Inc","weight":0.17,"rank":92,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"TRI","name":"Thomson Reuters Corporation Common Shares","weight":0.17,"rank":93,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"ROP","name":"Roper Technologies, Inc. Common Stock","weight":0.17,"rank":94,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"AXON","name":"Axon Enterprise, Inc. Common Stock","weight":0.16,"rank":95,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"ODFL","name":"Old Dominion Freight Line","weight":0.16,"rank":96,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"CRWV","name":"CoreWeave, Inc. Class A Common Stock","weight":0.16,"rank":97,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"DXCM","name":"DexCom, Inc.","weight":0.15,"rank":98,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"ALNY","name":"Alnylam Pharmaceuticals, Inc.","weight":0.14,"rank":99,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"GEHC","name":"GE HealthCare Technologies Inc. Common Stock","weight":0.13,"rank":100,"price":null,"change":null,"changePct":null,"priceDate":null},{"ticker":"CPRT","name":"Copart Inc","weight":0.12,"rank":101,"price":null,"change":null,"changePct":null,"priceDate":null}];
+  const meta = {"holdingsAsOf":"2026-09-19 starter snapshot","generatedAt":"2026-09-26 22:59 UTC","totalWeight":99.81,"missingQuotes":101};
+  const d3 = await import("https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm");
+  const chart = d3.select("#chart"), width = 1250, height = 850;
+  const search = document.querySelector("#search"), status = document.querySelector("#status");
+  const fields = Object.fromEntries(["Ticker","Name","Weight","Rank","Price","Change","Date"]
+    .map(key => [key, document.querySelector("#detail" + key)]));
+  const dollars = new Intl.NumberFormat("en-US", {style:"currency",currency:"USD",minimumFractionDigits:2,maximumFractionDigits:2});
+  const changes = holdings.map(d => d.changePct).filter(Number.isFinite);
+  const losses = changes.filter(value => value < 0);
+  const gains = changes.filter(value => value > 0);
+  const mostNegative = losses.length ? d3.min(losses) : null;
+  const leastNegative = losses.length ? d3.max(losses) : null;
+  const minGain = gains.length ? d3.min(gains) : null;
+  const maxGain = gains.length ? d3.max(gains) : null;
+  let lockedTicker = null;
+
+  function price(d) { return d.price == null ? "N/A" : dollars.format(d.price); }
+  function percent(d) {
+    return d.changePct == null ? "N/A" : `${d.changePct > 0 ? "+" : ""}${d.changePct.toFixed(2)}%`;
+  }
+  function scale(value, start, end) {
+    return start === end ? 1 : Math.max(0, Math.min(1, (value - start) / (end - start)));
+  }
+  function color(d) {
+    if (d.changePct == null || d.changePct === 0) return "#dce4ed";
+    if (d.changePct < 0) {
+      return d3.interpolateRgb("#8b0000", "#f6d5d3")(scale(d.changePct, mostNegative, leastNegative));
+    }
+    return d3.interpolateRgb("#006400", "#ccebd8")(scale(d.changePct, minGain, maxGain));
+  }
+  function textColor(d) {
+    const rgb = d3.rgb(color(d));
+    const luminance = (0.299 * rgb.r + 0.587 * rgb.g + 0.114 * rgb.b) / 255;
+    return luminance < 0.48 ? "#ffffff" : "#18232e";
+  }
+  function showDetail(d) {
+    if (!d) return;
+    fields.Ticker.textContent = d.ticker; fields.Name.textContent = d.name;
+    fields.Weight.textContent = d.weight.toFixed(4) + "%";
+    fields.Rank.textContent = "#" + d.rank;
+    fields.Price.textContent = price(d);
+    fields.Change.textContent = d.changePct == null ? "N/A" :
+      `${d.change > 0 ? "+" : ""}${dollars.format(d.change)} (${d.changePct > 0 ? "+" : ""}${d.changePct.toFixed(2)}%)`;
+    fields.Change.className = "detail-value " + (d.changePct > 0 ? "up" : d.changePct < 0 ? "down" : "");
+    fields.Date.textContent = d.priceDate || "N/A";
+  }
+
+  function render(filter = "") {
+    chart.selectAll("*").remove();
+    const query = filter.trim().toLowerCase();
+    const data = query ? holdings.filter(d => d.ticker.toLowerCase().includes(query) || d.name.toLowerCase().includes(query)) : holdings;
+    status.textContent = `Showing ${data.length} of ${holdings.length} holdings | source weights total ${meta.totalWeight.toFixed(4)}%` +
+      (meta.missingQuotes ? ` | ${meta.missingQuotes} missing quote${meta.missingQuotes === 1 ? "" : "s"}` : "");
+    if (!data.length) {
+      chart.append("text").attr("x",width/2).attr("y",height/2).attr("text-anchor","middle")
+        .attr("fill","#aab5c1").attr("font-size",22).text("No matching holdings");
+      return;
+    }
+    const root = d3.hierarchy({children:data}).sum(d => d.weight || 0).sort((a,b) => b.value-a.value);
+    d3.treemap().size([width,height]).paddingInner(2).paddingOuter(4)(root);
+    const groups = chart.selectAll("g.holding").data(root.leaves()).join("g")
+      .attr("class","holding").attr("tabindex",0).attr("role","button")
+      .attr("aria-label",d => `${d.data.ticker}, ${d.data.name}, ${d.data.weight.toFixed(4)} percent, ${price(d.data)}, daily change ${d.data.changePct == null ? "unavailable" : d.data.changePct.toFixed(2) + " percent"}`)
+      .attr("transform",d => `translate(${d.x0},${d.y0})`);
+    groups.append("rect").attr("width",d => Math.max(1,d.x1-d.x0)).attr("height",d => Math.max(1,d.y1-d.y0))
+      .attr("rx",3).attr("fill",d => color(d.data)).attr("stroke","#0d1117").attr("stroke-width",0.8);
+    groups.append("title").text(d => `${d.data.ticker} · ${d.data.name}\n${price(d.data)} · ${d.data.changePct == null ? "N/A" : (d.data.changePct > 0 ? "+" : "") + d.data.changePct.toFixed(2) + "%"}\nWeight: ${d.data.weight.toFixed(4)}%`);
+    groups.append("clipPath").attr("id",d => `clip-${d.data.rank}`)
+      .append("rect").attr("width",d => Math.max(1,d.x1-d.x0)).attr("height",d => Math.max(1,d.y1-d.y0));
+
+    groups.each(function(d) {
+      const w = d.x1-d.x0, h = d.y1-d.y0;
+      const group = d3.select(this).append("g").attr("clip-path",`url(#clip-${d.data.rank})`);
+      const lines = [d.data.ticker, price(d.data), percent(d.data)];
+      const longest = Math.max(...lines.map(value => value.length));
+      const font = Math.max(2.5, Math.min(20, h / 3.8, (w - 4) / (longest * 0.62)));
+      const lineHeight = font * 1.12;
+      const firstY = Math.max(font, (h - lineHeight * 3) / 2 + font);
+      group.selectAll("text").data(lines).join("text")
+        .attr("x", w > 34 ? 5 : w / 2)
+        .attr("y", (_, index) => firstY + index * lineHeight)
+        .attr("text-anchor", w > 34 ? "start" : "middle")
+        .attr("fill", textColor(d.data))
+        .attr("font-weight", (_, index) => index === 0 ? 800 : 600)
+        .attr("font-size", font)
+        .attr("pointer-events", "none")
+        .text(value => value);
+    });
+
+    function restore() {
+      groups.attr("transform",d => `translate(${d.x0},${d.y0})`).style("filter",null).style("opacity",1);
+      groups.select("rect").attr("stroke","#0d1117").attr("stroke-width",0.8);
+    }
+    function activate(node,d,persist) {
+      if (persist) lockedTicker = d.data.ticker;
+      showDetail(d.data); restore();
+      groups.style("opacity",other => other === d ? 1 : 0.36);
+      const w = Math.max(1,d.x1-d.x0), h = Math.max(1,d.y1-d.y0);
+      const scale = Math.min(2.6,Math.max(1.08,140/Math.max(28,Math.min(w,h))));
+      const x = Math.max(4,Math.min(width-w*scale-4,d.x0+(w-w*scale)/2));
+      const y = Math.max(4,Math.min(height-h*scale-4,d.y0+(h-h*scale)/2));
+      d3.select(node).raise().attr("transform",`translate(${x},${y}) scale(${scale})`)
+        .style("filter","drop-shadow(0 8px 16px rgba(0,0,0,.5))")
+        .select("rect").attr("stroke","#3276c0").attr("stroke-width",3);
+    }
+    groups.on("mouseenter",function(e,d){ if (!lockedTicker) activate(this,d,false); })
+      .on("mouseleave",function(){ if (!lockedTicker) restore(); })
+      .on("focus",function(e,d){ if (!lockedTicker) activate(this,d,false); })
+      .on("blur",function(){ if (!lockedTicker) restore(); })
+      .on("click",function(e,d){ e.stopPropagation(); lockedTicker === d.data.ticker ? (lockedTicker=null,restore()) : activate(this,d,true); })
+      .on("keydown",function(e,d){ if (e.key === "Enter" || e.key === " ") { e.preventDefault(); this.dispatchEvent(new MouseEvent("click",{bubbles:true})); } });
+    chart.on("click",() => { lockedTicker=null; restore(); showDetail(holdings[0]); });
+  }
+  search.addEventListener("input",() => {
+    lockedTicker=null; render(search.value);
+    const query = search.value.trim().toLowerCase();
+    showDetail(holdings.find(d => d.ticker.toLowerCase().includes(query) || d.name.toLowerCase().includes(query)) || holdings[0]);
+  });
+  document.querySelector("#reset").addEventListener("click",() => {
+    search.value=""; lockedTicker=null; render(); showDetail(holdings[0]); search.focus();
+  });
+  document.addEventListener("keydown",e => { if (e.key === "Escape") { lockedTicker=null; render(search.value); showDetail(holdings[0]); } });
+  const quoteNote = meta.missingQuotes === holdings.length
+    ? "Prices are unavailable in this starter chart. Run the workflow to fetch them."
+    : "Prices are the latest available Yahoo Finance regular-hours bar (one-minute when available); changes compare with the prior trading session's final bar.";
+  document.querySelector("#lossLegend").lastChild.textContent = losses.length
+    ? ` Losses ${mostNegative.toFixed(2)}% to ${leastNegative.toFixed(2)}%`
+    : " Losses unavailable";
+  document.querySelector("#gainLegend").lastChild.textContent = gains.length
+    ? ` Gains +${minGain.toFixed(2)}% to +${maxGain.toFixed(2)}%`
+    : " Gains unavailable";
+  document.querySelector("#footer").textContent =
+    `Invesco holdings as of ${meta.holdingsAsOf}. Chart generated ${meta.generatedAt}. ${quoteNote} Small cells show their complete details on hover or selection. D3 loads from jsDelivr.`;
+  showDetail(holdings[0]); render();
+}
+init().catch(error => {
+  console.error(error);
+  document.querySelector("#status").textContent = "Chart could not load. Check your connection to jsDelivr for D3.js.";
+});
+</script>
+</body>
+</html>
