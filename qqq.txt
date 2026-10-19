@@ -1,4 +1,4 @@
-# QQQ holdings as of 2026-10-17; weight_pct is percentage points
+# QQQ holdings as of 2026-10-18; weight_pct is percentage points
 symbol	company	weight_pct
 NVDA	NVIDIA Corp	8.153006
 AAPL	Apple Inc	7.919156
