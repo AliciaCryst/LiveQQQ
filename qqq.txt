@@ -1,105 +1,105 @@
-# QQQ holdings as of 2026-11-05; weight_pct is percentage points
+# QQQ holdings as of 2026-11-08; weight_pct is percentage points
 symbol	company	weight_pct
-AAPL	Apple Inc	8.695212
-NVDA	NVIDIA Corp	7.576356
-MSFT	Microsoft Corp	6.888935
-AMZN	Amazon.com Inc	4.858402
-MU	Micron Technology Inc	3.542589
-AMD	Advanced Micro Devices Inc	3.154803
-TSLA	Tesla Inc	3.125312
-META	Meta Platforms Inc	3.114491
-WMT	Walmart Inc	2.968283
-GOOGL	Alphabet Inc	2.870202
-GOOG	Alphabet Inc	2.695472
-SPCX	Space Exploration Technologies Corp	2.534232
-AVGO	Broadcom Inc	2.400852
-COST	Costco Wholesale Corp	2.261473
-CSCO	Cisco Systems Inc	1.802940
-PLTR	Palantir Technologies Inc	1.704089
-INTC	Intel Corp	1.312000
-NFLX	Netflix Inc	1.304659
-PANW	Palo Alto Networks Inc	1.225626
-TXN	Texas Instruments Inc	1.220608
-AMAT	Applied Materials Inc	1.210774
-AMGN	Amgen Inc	1.189233
-LIN	Linde PLC	1.148309
-LRCX	Lam Research Corp	1.107487
-CRWD	Crowdstrike Holdings Inc	1.062877
-GILD	Gilead Sciences Inc	0.992967
-PEP	PepsiCo Inc	0.930739
-ADI	Analog Devices Inc	0.836032
-SHOP	Shopify Inc	0.830295
-TMUS	T-Mobile US Inc	0.823224
-KLAC	KLA Corp	0.810497
-ISRG	Intuitive Surgical Inc	0.791027
-QCOM	QUALCOMM Inc	0.786749
-VRTX	Vertex Pharmaceuticals Inc	0.657027
-ASML	ASML Holding NV	0.609557
-BKNG	Booking Holdings Inc	0.605759
-ADP	Automatic Data Processing Inc	0.583027
-SBUX	Starbucks Corp	0.578284
-SNDK	Sandisk Corp	0.564291
-MRVL	Marvell Technology Inc	0.559692
-MAR	Marriott International Inc/MD	0.519939
-APP	AppLovin Corp	0.518025
-STX	Seagate Technology Holdings PLC	0.505318
-ADBE	Adobe Inc	0.468080
-INTU	Intuit Inc	0.463789
-WDC	Western Digital Corp	0.461066
-MRNA	Moderna Inc	0.460668
-CSX	CSX Corp	0.449933
-MNST	Monster Beverage Corp	0.447041
-REGN	Regeneron Pharmaceuticals Inc	0.436350
-CTAS	Cintas Corp	0.432931
-FTNT	Fortinet Inc	0.429510
-CMCSA	Comcast Corp	0.421938
-CDNS	Cadence Design Systems Inc	0.409813
-MDLZ	Mondelez International Inc	0.407509
-CEG	Constellation Energy Corp	0.405782
-SNPS	Synopsys Inc	0.403192
-MELI	MercadoLibre Inc	0.370704
-ROST	Ross Stores Inc	0.360560
-ORLY	O'Reilly Automotive Inc	0.353650
-DASH	DoorDash Inc	0.351692
-ARM	ARM Holdings PLC	0.347425
-ABNB	Airbnb Inc	0.341048
-AEP	American Electric Power Co Inc	0.329818
-HON	Honeywell International Inc	0.326784
-NXPI	NXP Semiconductors NV	0.294530
-FAST	Fastenal Co	0.291497
-DDOG	Datadog Inc	0.279407
-ADSK	Autodesk Inc	0.268720
-PDD	PDD Holdings Inc	0.267937
-MPWR	Monolithic Power Systems Inc	0.265688
-PCAR	PACCAR Inc	0.262837
-IDXX	IDEXX Laboratories Inc	0.252407
-CCEP	Coca-Cola Europacific Partners PLC	0.243744
-PYPL	PayPal Holdings Inc	0.240936
-FANG	Diamondback Energy Inc	0.240290
-XEL	Xcel Energy Inc	0.239864
-KDP	Keurig Dr Pepper Inc	0.239803
-ROP	Roper Technologies Inc	0.231947
-EXC	Exelon Corp	0.229438
-HONA	Honeywell Aerospace Inc	0.226470
-MSTR	Strategy Inc	0.225263
-BKR	Baker Hughes Co	0.219151
-LITE	Lumentum Holdings Inc	0.218465
-TRI	Thomson Reuters Corp	0.212590
-FER	Ferrovial NV	0.206416
-PAYX	Paychex Inc	0.205042
-TTWO	Take-Two Interactive Software Inc	0.190569
-WDAY	Workday Inc	0.187413
-GEHC	GE HealthCare Technologies Inc	0.180789
-ODFL	Old Dominion Freight Line Inc	0.168944
-MCHP	Microchip Technology Inc	0.168213
-TER	Teradyne Inc	0.158930
-DXCM	Dexcom Inc	0.152248
-USD	CASH &amp; EQUIVALENTS	0.149658
-ALAB	Astera Labs Inc	0.148780
-AXON	Axon Enterprise Inc	0.148458
-CPRT	Copart Inc	0.143643
-NQZ6	CME E-Mini NASDAQ 100 Index Future	0.137584
-NBIS	Nebius Group NV	0.137193
-RKLB	Rocket Lab Corp	0.131475
-ALNY	Alnylam Pharmaceuticals Inc	0.100136
-CRWV	CoreWeave Inc	0.095751
+AAPL	Apple Inc	8.534255
+NVDA	NVIDIA Corp	7.682663
+MSFT	Microsoft Corp	6.729491
+AMZN	Amazon.com Inc	4.776771
+MU	Micron Technology Inc	3.674269
+AMD	Advanced Micro Devices Inc	3.456282
+TSLA	Tesla Inc	3.213947
+META	Meta Platforms Inc	3.098660
+WMT	Walmart Inc	2.878206
+GOOGL	Alphabet Inc	2.854030
+SPCX	Space Exploration Technologies Corp	2.715809
+GOOG	Alphabet Inc	2.680158
+AVGO	Broadcom Inc	2.386347
+COST	Costco Wholesale Corp	2.206111
+CSCO	Cisco Systems Inc	1.744117
+PLTR	Palantir Technologies Inc	1.739807
+INTC	Intel Corp	1.394326
+NFLX	Netflix Inc	1.245026
+AMAT	Applied Materials Inc	1.244995
+PANW	Palo Alto Networks Inc	1.206073
+TXN	Texas Instruments Inc	1.200868
+LRCX	Lam Research Corp	1.182617
+AMGN	Amgen Inc	1.173711
+LIN	Linde PLC	1.119981
+CRWD	Crowdstrike Holdings Inc	1.047236
+GILD	Gilead Sciences Inc	0.975734
+PEP	PepsiCo Inc	0.909497
+KLAC	KLA Corp	0.853213
+SHOP	Shopify Inc	0.848614
+ADI	Analog Devices Inc	0.830694
+TMUS	T-Mobile US Inc	0.819415
+QCOM	QUALCOMM Inc	0.819130
+ISRG	Intuitive Surgical Inc	0.754279
+VRTX	Vertex Pharmaceuticals Inc	0.653735
+ASML	ASML Holding NV	0.631619
+MRVL	Marvell Technology Inc	0.583852
+SNDK	Sandisk Corp	0.576528
+BKNG	Booking Holdings Inc	0.569137
+ADP	Automatic Data Processing Inc	0.568144
+SBUX	Starbucks Corp	0.566532
+APP	AppLovin Corp	0.561514
+MAR	Marriott International Inc/MD	0.512004
+STX	Seagate Technology Holdings PLC	0.492651
+MRNA	Moderna Inc	0.478479
+ADBE	Adobe Inc	0.448448
+WDC	Western Digital Corp	0.448365
+INTU	Intuit Inc	0.440390
+REGN	Regeneron Pharmaceuticals Inc	0.431223
+CSX	CSX Corp	0.428991
+MNST	Monster Beverage Corp	0.421614
+CTAS	Cintas Corp	0.419512
+CEG	Constellation Energy Corp	0.417573
+CDNS	Cadence Design Systems Inc	0.415363
+FTNT	Fortinet Inc	0.411081
+SNPS	Synopsys Inc	0.406982
+CMCSA	Comcast Corp	0.406961
+MDLZ	Mondelez International Inc	0.397254
+ABNB	Airbnb Inc	0.375774
+MELI	MercadoLibre Inc	0.360893
+ARM	ARM Holdings PLC	0.359029
+ROST	Ross Stores Inc	0.349486
+DASH	DoorDash Inc	0.346514
+ORLY	O'Reilly Automotive Inc	0.342826
+HON	Honeywell International Inc	0.328803
+AEP	American Electric Power Co Inc	0.324798
+NXPI	NXP Semiconductors NV	0.295185
+FAST	Fastenal Co	0.288084
+DDOG	Datadog Inc	0.282685
+MPWR	Monolithic Power Systems Inc	0.275811
+PDD	PDD Holdings Inc	0.261462
+ADSK	Autodesk Inc	0.257801
+PCAR	PACCAR Inc	0.253074
+IDXX	IDEXX Laboratories Inc	0.251017
+PYPL	PayPal Holdings Inc	0.238849
+CCEP	Coca-Cola Europacific Partners PLC	0.238111
+FANG	Diamondback Energy Inc	0.236265
+KDP	Keurig Dr Pepper Inc	0.234934
+XEL	Xcel Energy Inc	0.234600
+HONA	Honeywell Aerospace Inc	0.228422
+LITE	Lumentum Holdings Inc	0.227767
+BKR	Baker Hughes Co	0.224041
+ROP	Roper Technologies Inc	0.222156
+EXC	Exelon Corp	0.221947
+MSTR	Strategy Inc	0.221619
+FER	Ferrovial NV	0.205072
+TRI	Thomson Reuters Corp	0.199913
+PAYX	Paychex Inc	0.198200
+TTWO	Take-Two Interactive Software Inc	0.189354
+WDAY	Workday Inc	0.178193
+GEHC	GE HealthCare Technologies Inc	0.175458
+ODFL	Old Dominion Freight Line Inc	0.161176
+TER	Teradyne Inc	0.160843
+ALAB	Astera Labs Inc	0.155989
+USD	CASH &amp; EQUIVALENTS	0.149806
+RKLB	Rocket Lab Corp	0.149689
+MCHP	Microchip Technology Inc	0.149332
+NBIS	Nebius Group NV	0.145617
+DXCM	Dexcom Inc	0.141233
+CPRT	Copart Inc	0.139412
+NQZ6	CME E-Mini NASDAQ 100 Index Future	0.136568
+AXON	Axon Enterprise Inc	0.119845
+CRWV	CoreWeave Inc	0.100402
+ALNY	Alnylam Pharmaceuticals Inc	0.098345
